@@ -1,0 +1,22 @@
+# Never commit data — synthetic or otherwise
+data/*.csv
+data/*.zip
+data/*.json
+data/*.parquet
+*.csv
+*.zip
+
+# Databricks / notebook cruft
+.databricks/
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+
+# Local env
+.env
+.DS_Store
+.vscode/
+.idea/
+
+# Checkpoints (streaming state — environment-specific, never versioned)
+**/_checkpoints/
