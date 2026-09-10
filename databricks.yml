@@ -1,0 +1,34 @@
+bundle:
+  name: meridian-health
+
+resources:
+  pipelines:
+    meridian_pipeline:
+      name: meridian_pipeline
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      libraries:
+        - file:
+            path: 05_pipeline_sdp/meridian_pipeline.sql
+
+variables:
+  catalog:
+    description: Target Unity Catalog
+    default: meridian_dev
+  schema:
+    description: Target schema
+    default: silver_sdp
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog: meridian_dev
+      schema: silver_sdp
+  prod:
+    mode: production
+    variables:
+      catalog: meridian_prod
+      schema: silver_sdp
