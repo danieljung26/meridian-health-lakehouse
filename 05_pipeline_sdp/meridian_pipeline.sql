@@ -5,33 +5,34 @@
 -- DAG automatically — order below is for readability only.
 -- ============================================================
 
--- ---------- BRONZE: streaming ingestion from the raw CSVs ----------
--- STREAM + read_files = Auto Loader under the hood (incremental, checkpointed).
+-- ---------- BRONZE: batch ingestion from static CSVs ----------
+-- Batch materialized views (not streaming) — correct tool for static files.
+-- read_files supports batch semantics and reads a single file directly.
 
-CREATE OR REFRESH STREAMING TABLE patients_bronze
+CREATE OR REFRESH MATERIALIZED VIEW patients_bronze
 AS SELECT *, _metadata.file_name AS source_file, current_timestamp() AS ingested_at
-FROM STREAM read_files(
+FROM read_files(
   '/Volumes/meridian_dev/bronze/raw_files/patients.csv',
   format => 'csv', header => true, inferColumnTypes => true);
 
-CREATE OR REFRESH STREAMING TABLE encounters_bronze
+CREATE OR REFRESH MATERIALIZED VIEW encounters_bronze
 AS SELECT *, _metadata.file_name AS source_file, current_timestamp() AS ingested_at
-FROM STREAM read_files(
+FROM read_files(
   '/Volumes/meridian_dev/bronze/raw_files/encounters.csv',
   format => 'csv', header => true, inferColumnTypes => true);
 
-CREATE OR REFRESH STREAMING TABLE medications_bronze
-AS SELECT * FROM STREAM read_files(
+CREATE OR REFRESH MATERIALIZED VIEW medications_bronze
+AS SELECT * FROM read_files(
   '/Volumes/meridian_dev/bronze/raw_files/medications.csv',
   format => 'csv', header => true, inferColumnTypes => true);
 
-CREATE OR REFRESH STREAMING TABLE procedures_bronze
-AS SELECT * FROM STREAM read_files(
+CREATE OR REFRESH MATERIALIZED VIEW procedures_bronze
+AS SELECT * FROM read_files(
   '/Volumes/meridian_dev/bronze/raw_files/procedures.csv',
   format => 'csv', header => true, inferColumnTypes => true);
 
-CREATE OR REFRESH STREAMING TABLE conditions_bronze
-AS SELECT * FROM STREAM read_files(
+CREATE OR REFRESH MATERIALIZED VIEW conditions_bronze
+AS SELECT * FROM read_files(
   '/Volumes/meridian_dev/bronze/raw_files/conditions.csv',
   format => 'csv', header => true, inferColumnTypes => true);
 
